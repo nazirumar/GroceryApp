@@ -17,12 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+app_name = 'dashboard'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('account/', include('account.urls')),
-    # path('grocery/', include('grocery.urls')),
-    # path('cart/', include('cart.urls')),
-    # path('checkout/', include('checkout.urls')),
-    # path('orders/', include('orders.urls')),
+    path('dashbord/', include('dashboard.urls', namespace='dashboard')),
     path('accounts/', include('allauth.urls')),
 ]

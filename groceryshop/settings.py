@@ -42,7 +42,11 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'userprofile',
-    'phone_field'
+    'phone_field',
+    'order',
+    'product',
+    'checkout',
+    
 ]
 SITE_ID = 1
 
@@ -62,7 +66,7 @@ ROOT_URLCONF = "groceryshop.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [ BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
