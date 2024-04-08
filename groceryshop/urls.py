@@ -16,11 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'dashboard'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashbord/', include('dashboard.urls', namespace='dashboard')),
+    path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('accounts/', include('allauth.urls')),
+    path('products/', include('product.urls', namespace='products')),
+    path('checkout/', include('checkout.urls', namespace='checkout')),
+    path('order/', include('order.urls', namespace='order')),
+
 ]
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)
+
+
+    
+    

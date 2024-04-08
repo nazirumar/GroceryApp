@@ -17,7 +17,7 @@ class Category(MPTTModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse_lazy("dashboard:brand_dashbord:create_list")
+        return reverse_lazy("dashboard:category_dashboard:category_list")
 
    
     
@@ -29,7 +29,10 @@ class Brand(models.Model):
     image = models.ImageField()
 
     def get_absolute_url(self):
-        return reverse_lazy("")
+        return reverse_lazy("dashboard:brand_dashboard:brand_list")
+    
+    def __str__(self):
+        return self.name
     
 
 class Product(models.Model):
@@ -41,17 +44,24 @@ class Product(models.Model):
     sku = models.CharField(max_length=30, unique=True)
     stock = models.PositiveIntegerField()
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
     
     def get_absolute_url(self):
-        return reverse_lazy("dashboard:product_dashbord:create_list")
+        return reverse_lazy("dashboard:product_dashboard:product_list")
+    
+    def get_thumbnail(self):
+        return self.productimage_set.first()
 
 class ProductImage(models.Model):
-    image =models.ImageField()
+    image = models.ImageField()
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     alt = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.alt
     
 
 

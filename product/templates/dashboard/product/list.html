@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+
+
+{% block content %}
+    
+<a href="{% url 'dashboard:product_dashboard:product_create' %}">Create Product</a>
+{% for object in object_list %}
+
+<a href="{% url 'dashboard:product_dashboard:product_update' object.pk %}">
+   <div>
+
+       {{object.name}}
+   </div>
+</a>
+<button type="button" data-delete-url="{% url 'dashboard:product_dashboard:delete_product' pk=object.pk %}"
+class="btn btn-primary delete-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+Delete
+</button>
+{% endfor %}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want delete this product
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a id="delete-button" href="" class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>  
+{% endblock content %}
+    

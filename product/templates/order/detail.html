@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+ <div class="container">
+    <div class="row">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+            <tbody>
+                {% for order in object.orderline_set.all %}
+                <tr>
+                    <td>{{order.product}}</td>
+                    <td>{{order.product_price}}</td>
+                    <td>{{order.quantity}}</td>
+                    <td>{{order.get_subtotal}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ </div>
+{% endblock content %}
+
+    

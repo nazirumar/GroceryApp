@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import CreateView, UpdateView,ListView
 from django.utils.text import slugify
@@ -8,7 +9,7 @@ from product.models import Category, Brand
 class CreateCategory(CreateView):
     model = Category
     fields = ['name', 'description', 'background_image']
-    template_name = 'dashbord/category/create.html'
+    template_name = 'dashboard/category/create.html'
     # success_url = reverse('
     def form_valid(self, form):
         instance = form.save()
@@ -21,7 +22,7 @@ class CreateCategory(CreateView):
 class UpdateCategory(UpdateView):
     model = Category
     fields = ['name', 'description', 'background_image']
-    template_name = 'dashbord/category/create.html'
+    template_name = 'dashboard/category/create.html'
 
     def form_valid(self, form):
         instance = form.instance
@@ -32,7 +33,7 @@ class UpdateCategory(UpdateView):
 class CreateSubCategory(CreateView):
     model = Category
     fields = ['name', 'description', 'background_image']
-    template_name = 'dashbord/category/create.html'
+    template_name = 'dashboard/category/create.html'
 
     def form_valid(self, form):
         instance = form.save()
@@ -44,7 +45,7 @@ class CreateSubCategory(CreateView):
 
 class CategoryList(ListView):
     model = Category
-    template_name = 'dashbord/category/list.html'
+    template_name = 'dashboard/category/list.html'
 
 
 
@@ -58,5 +59,15 @@ def category_detail(request, pk):
         'root': root,
         
         }
-    return render(request, 'dashbord/category/detail.html', context)
+    return render(request, 'dashboard/category/detail.html', context)
 
+
+
+
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    if category:
+        category.delete()
+        return JsonResponse({'message': 'Category  deleted successfully'}, status=200)
+    return JsonResponse({'message':'this Category  instance does not exist'}, status=400)

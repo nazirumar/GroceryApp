@@ -29,7 +29,6 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('slug', models.SlugField(max_length=100, unique=True)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('backgorund_image', models.ImageField(blank=True, null=True, upload_to='category_background')),
                 ('lft', models.PositiveIntegerField(editable=False)),
                 ('rght', models.PositiveIntegerField(editable=False)),
                 ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),

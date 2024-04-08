@@ -1,0 +1,107 @@
+{% extends 'dashboard/base.html' %}
+
+{% block static %}
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+{% endblock static %}
+
+{% block dashboardcontent %}
+<form action="{% url 'dashboard:product_dashboard:create_image' pk=product_id %}" class="dropzone"
+  id="my-great-dropzone" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="fallback">
+    {{ form }}
+  </div>
+</form>
+<div id="productimages">
+  <div class="row">
+    {% for object in object_list %}
+    <div class="col-md-4">
+
+      <img src="{{ object.image.url }}" alt="{{ object.alt }}">
+
+      <button type="button" data-delete-url="{% url 'dashboard:product_dashboard:delete_image' pk=object.pk %}"
+        class="btn btn-primary delete-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Delete
+      </button>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want delete this image
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a id="delete-button" href="" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock dashboardcontent %}
+
+{% block js %}
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+
+<script language="javascript" type="text/javascript">
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+    paramName: "image", // The name that will be used to transfer the file
+    success: function (file, response) {
+      this.removeFile(file);
+      $('productimages .row').append(`<div class="col-md-4" >
+        <img src="${response.url}" alt="${response.alt}">
+          <button type="button" data-delete-url="${response.delete_url}"
+            class="btn btn-primary delete-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Delete
+          </button>
+        </div>`)
+      
+    }
+  };
+
+  let $deleteButton = $('#delete-button');
+
+  $('body').on('click', '.delete-modal', function () {
+    $deleteButton.attr('href', $(this).attr('data-delete-url'))
+  });
+
+  $deleteButton.click(function (e) {
+    e.preventDefault();
+    let $this = $(this);
+    $.ajax({
+      url: $this.attr('href'),
+      data: "",
+      method: 'POST',
+      headers: { 'X-CSRFToken': csrftoken },
+      success: function () {
+        $('#exampleModal').modal('hide')
+        $('.delete-modal[data-delete-url="' + $this.attr('href') + '"]').parent().remove();
+      }
+    });
+  });
+</script>
+{% endblock js %}

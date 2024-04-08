@@ -6,8 +6,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 ORDER_STATUS =(
-    (0, 'Fullfiled'),
-    (1, 'Unfullfiled'),
+    (0, 'Unfullfiled'),
+    (1, 'Fullfiled'),
     (2, 'Canceled'),
     (3, 'Refunded'),
 )
@@ -18,6 +18,9 @@ class Order(models.Model):
     email = models.EmailField()
     checkout_token = models.CharField(max_length=226,default="")
     note = models.TextField(blank=True, default="")
+    shipping =models.ForeignKey('userprofile.Adresses', on_delete=models.CASCADE)
+    total = models.FloatField(default=0)
+    
 
     def __str__(self):
         return self.email
@@ -35,3 +38,8 @@ class OrderLine(models.Model):
 
     def __str__(self):
         return "{}x{}".format(self.product_name, self.product_price)
+    
+    
+    def get_subtotal(self):
+        return self.product.price * self.quantity
+

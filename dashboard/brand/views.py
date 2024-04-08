@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import CreateView, UpdateView,ListView
 from django.utils.text import slugify
@@ -11,7 +12,7 @@ from product.models import Brand
 class CreateBrand(CreateView):
     model= Brand
     fields = ['name', 'image']
-    template_name = 'dashbord/brand/create.html'
+    template_name = 'dashboard/brand/create.html'
 
     def form_valid(self, form):
         instance = form.save()
@@ -25,7 +26,7 @@ class CreateBrand(CreateView):
 class UpdateBrand(UpdateView):
     model= Brand
     fields = ['name', 'image']
-    template_name = 'dashbord/brand/create.html'
+    template_name = 'dashboard/brand/create.html'
 
     def form_valid(self, form):
         instance = form.instance
@@ -36,4 +37,13 @@ class UpdateBrand(UpdateView):
 
 class BrandList(ListView):
     model = Brand
-    template_name = 'dashbord/brand/list.html'
+    template_name = 'dashboard/brand/list.html'
+
+
+
+def delete_brand(request, pk):
+    brand = get_object_or_404(Brand, pk=pk)
+    if brand:
+        brand.delete()
+        return JsonResponse({'message': 'Brand  deleted successfully'}, status=200)
+    return JsonResponse({'message':'this Brand  instance does not exist'}, status=400)
